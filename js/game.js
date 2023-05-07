@@ -74,7 +74,6 @@ function softcap(value, cap, power = 0.5) {
 	else
 		return value.pow(power).times(cap.pow(decimalOne.sub(power)))
 }
-
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer){
 	for (id in tmp[layer].upgrades){
@@ -122,7 +121,7 @@ function canReset(layer)
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
 	else if(tmp[layer].type== "static")
 		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
-	else 
+	else
 		return false
 }
 
