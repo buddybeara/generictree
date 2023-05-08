@@ -1,1 +1,4 @@
 CrustyRonaldMcdonald
+teleportation
+weakness: heavier objects take more energy
+mr draws
