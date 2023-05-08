@@ -19,7 +19,8 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v0.0</h3><br>
-		- game is heavily wip
+		- Added things.<br>
+		- Added stuff.`
 
 let winText = `Wow you actually did that`
 
