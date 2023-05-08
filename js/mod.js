@@ -5,7 +5,7 @@ let modInfo = {
 	pointsName: "Value",
 	modFiles: ["layers.js", "tree.js"],
 
-	discordName: "nuhuh",
+	discordName: "nuhuh.html",
 	discordLink: "nuhuh.html",
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
 	offlineLimit: 48,  // In hours
