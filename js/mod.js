@@ -6,7 +6,7 @@ let modInfo = {
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "nuhuh",
-	discordLink: "nuhuh",
+	discordLink: "nuhuh.html",
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
 	offlineLimit: 48,  // In hours
 }
@@ -19,8 +19,7 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+		- game is heavily wip
 
 let winText = `Wow you actually did that`
 
@@ -81,42 +80,4 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
-}
-// Function to show notifications
-function addNotification(type="none",text="This is a test notification.",title="",timer=3) {
-	switch(type) {
-		case "achievement":
-			notificationTitle = "Achievement Unlocked!";
-			notificationType = "achievement-notification"
-			break;
-		case "milestone":
-			notificationTitle = "Milestone Gotten!";
-			notificationType = "milestone-notification"
-			break;
-		case "challenge":
-			notificationTitle = "Challenge Complete";
-			notificationType = "challenge-notification"
-			break;
-		default:
-			notificationTitle = "Something Happened?";
-			notificationType = "default-notification"
-			break;
-	}
-	if(title != "") notificationTitle = title;
-	notificationMessage = text;
-	notificationTimer = timer; 
-
-	activeNotifications.push({"time":notificationTimer,"type":notificationType,"title":notificationTitle,"message":(notificationMessage+"\n"),"id":notificationID})
-	notificationID++;
-}
-
-
-//Function to reduce time on active notifications
-function adjustNotificationTime(diff) {
-	for(notification in activeNotifications) {
-		activeNotifications[notification].time -= diff;
-		if(activeNotifications[notification]["time"] < 0) {
-			activeNotifications.splice(notification,1); // Remove notification when time hits 0
-		}
-	}
 }
