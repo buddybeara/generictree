@@ -1,11 +1,11 @@
 let modInfo = {
 	name: "Generic Prestige Tree",
 	id: "startingsave",
-	author: "nobody",
+	author: "Buddy (ONLY WORKS TO ROW 3. ACHIEVEMENTS WORK BUT NOTHING ELSE FOR ROW 4+)",
 	pointsName: "Value",
 	modFiles: ["layers.js", "tree.js"],
 
-	discordName: "nuhuh.html",
+	discordName: "nuhuh",
 	discordLink: "nuhuh.html",
 	initialStartPoints: new Decimal (10), // Used for hard resets and new players
 	offlineLimit: 48,  // In hours
@@ -13,20 +13,20 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.1",
+	name: "Starting on gaining Values",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.1</h3><br>
+		- Added some upgrades, Dimensions now have a lot added, some new requirements, Achievements added, Infinities now have 1 buyable. <br>
+		- STILL VERY WIP`
 
 let winText = `Wow you actually did that`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
-var doNotCallTheseFunctionsEveryTick = ["blowUpEverything"]
+var doNotCallTheseFunctionsEveryTick = ["blowUpEverything","display"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
@@ -43,11 +43,13 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (hasUpgrade('p', 11)) gain = gain.times(1.5)
+	if (hasUpgrade('p', 11)) gain = gain.times(1.5+tmp.u.effect)
 		if (hasUpgrade('p', 12)) gain = gain.times(upgradeEffect('p', 12))
 					if (hasUpgrade('p', 13)) gain = gain.times(upgradeEffect('p', 13))
-			if (hasUpgrade('e', 11)) gain = gain.add(upgradeEffect('e', 11))
 				if (player.e.unlocked) gain = gain.add(tmp.e.effect)
+					if (player.i.unlocked) gain = gain.pow(buyableEffect('i',11))
+						if (player.d.unlocked) gain = gain.times(tmp.d.dimensionPow)
+							if (hasMilestone('u', 0)) gain = gain.times(1.2)
 	return gain
 }
 
@@ -61,7 +63,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e1000000000000000000"))
+	return player.points.gte(new Decimal("ee2.718e30"))
 }
 
 
