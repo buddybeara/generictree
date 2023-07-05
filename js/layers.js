@@ -1251,7 +1251,7 @@ addLayer("a", {
                 tooltip: "Get Lunars and Solars. Reward: x2 to the Super Upgraders and Super Exponential Buffs.",
 				image: "images/achs/25.png",
             },
-			111: {
+			77:{
                 name: "Whats 9 + 10",
                 done() { return player.points.gte("1e1e21") },
                 tooltip: "Get 1e1e21 Values.",
