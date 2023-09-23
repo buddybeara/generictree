@@ -1,5 +1,5 @@
 let modInfo = {
-	name: "Generic Prestige Tree",
+	name: "The Generic Tree",
 	id: "startingsave",
 	author: "Buddy (ONLY WORKS TO ROW 3. ACHIEVEMENTS WORK BUT NOTHING ELSE FOR ROW 4+)",
 	pointsName: "Value",
@@ -50,6 +50,7 @@ function getPointGen() {
 					if (player.i.unlocked) gain = gain.pow(buyableEffect('i',11))
 						if (player.d.unlocked) gain = gain.times(tmp.d.dimensionPow)
 							if (hasMilestone('u', 0)) gain = gain.times(1.2)
+							if (hasUpgrade('u', 21)) gain = gain.pow(1.1)
 	return gain
 }
 
