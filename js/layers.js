@@ -20,7 +20,7 @@ addLayer("p", {
 		if (hasUpgrade('u',31)) mult = mult.pow(1.1)
 		if (hasUpgrade('p',32)) mult = mult.add(upgradeEffect('p', 32))
 		if (hasUpgrade('p',33)) mult = mult.add(upgradeEffect('p', 33))
-		if (hasUpgrade('u',61)) mult = mult.add(tmp.u.effect.log10())
+		if (hasUpgrade('u',61)) mult = mult.add(tmp.u.effect)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -314,6 +314,8 @@ addLayer("u", {
 		m = m.times(player.u.points)
 		if (hasUpgrade("u", 11)) m = m.times(2)
 			if (hasUpgrade("u", 13)) m = m.pow(1.1)
+				if (hasUpgrade("u", 62)) m = m.add((upgradeEffect('p', 13).log2()))
+					
 			return m
 		},
 		effectDescription() {
@@ -374,8 +376,9 @@ addLayer("u", {
 		},
 		62: {
 		title: "Absolute Inflation",
-		description: "Value Inflation is buffed by Starting Values",
+		description: "The Upgrader Boost is boosted by Value Inflation",
 		cost: new Decimal(40),
+		effectDisplay() { return "+"+format(upgradeEffect('p', 13).pow(0.75)) },
 		unlocked() {return (hasUpgrade("u", 41))},
 		},
 	},

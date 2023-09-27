@@ -13,14 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.1",
-	name: "Starting on gaining Values",
+	num: "0.2",
+	name: "Gaining Alpha???"
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.1</h3><br>
+	<h3>v0.2</h3><br>
 		- Added some upgrades, Dimensions now have a lot added, some new requirements, Achievements added, Infinities now have 1 buyable. <br>
-		- STILL VERY WIP`
+		- a bit less wip lol`
 
 let winText = `Wow you actually did that`
 
