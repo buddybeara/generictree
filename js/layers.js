@@ -1333,16 +1333,15 @@ addLayer("a", {
 				image: "images/achs/21.png",
             },
 			24: {
-                name: "it was always exponential",
+                name: "Googology???",
                 done() { return player.sn.points.unlocked },
-                tooltip: "Unlock Super Exponentials. Reward: ^1.1 Points",
-				textStyle: {'color': '#ff0000'},
+                tooltip: "Unlock Super Numerical Energy. Reward: idk yet",
 				image: "images/achs/real22.png",
             },
 			25: {
-                name: "Upgraders for Upgraders (which are upgrades for upgrades)",
+                name: "Replicanti 2: Electric Boogaloo",
                 done() { return player.su.points.unlocked },
-                tooltip: "Unlock Super Upgraders. Reward: 3 more Upgrader Upgrades",
+                tooltip: "Unlock Super Multipliers. Reward: still don't know yet",
 				image: "images/achs/real23.png",
             },
 			26: {
