@@ -4,7 +4,7 @@ body {
 	overflow: hidden;
 	--background: #0f0f0f;
 	--color: #dfdfdf;
-	--points: #ffffff;
+	--points: #0064ff;
 	background: var(--background)
 }
 

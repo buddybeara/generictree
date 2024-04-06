@@ -15,22 +15,19 @@ addLayer("p", {
     exponent: 0.75,
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-		if (hasUpgrade('e',12)) mult = mult.add(upgradeEffect('p', 13))
-		if (hasUpgrade('e',31)) mult = mult.add(upgradeEffect('e', 31))
-		if (hasUpgrade('u',31)) mult = mult.pow(1.1)
 		if (hasUpgrade('p',32)) mult = mult.add(upgradeEffect('p', 32))
-		if (hasUpgrade('p',33)) mult = mult.add(upgradeEffect('p', 33))
-		if (hasUpgrade('u',61)) mult = mult.add(tmp.u.effect)
+		if (hasUpgrade('n',12)) mult = mult.add(upgradeEffect('n', 12))
+		if (hasUpgrade('p',21)) mult = mult.add(1)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
 	exp = new Decimal(1)
-	if (hasUpgrade('p',23)) exp = exp.add(1)
+	if (hasUpgrade('p',23)) exp = exp.add(0.1)
         return exp
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "s", description: "S: Reset for Starting Values", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 	upgrades: {
 		11: {
@@ -41,126 +38,81 @@ addLayer("p", {
 		12: {
 		title: "SV",
 		description: "The value of starting values multiplies the value of Values",
-		cost: new Decimal(16),
+		cost: new Decimal(8),
 		 effect() {
-			 if (player.u.unlocked) return (player[this.layer].points.add(1).pow(0.2)).add(tmp.u.effect)
-			 else return player.p.points.add(1).pow(0.2)
+			if (hasUpgrade("n",22)) return (player.p.points.add(1).pow(0.2)).times(upgradeEffect('n', 22))			
+				else
+					return player.p.points.add(1).pow(0.2)
 		 },
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
 			13: {
 		title: "Value Inflation",
 		description: "The value of Values multiplies the value of Values",
-		cost: new Decimal(256),
+		cost: new Decimal(16),
 		 effect() {
-						if (hasUpgrade("u",41)) return ((player.points.add(1).pow(0.2)).add(tmp.u.effect)).pow(1.1) 
-							else if (player.u.unlocked) return (player.points.add(1).pow(0.2)).add(tmp.u.effect)
-        else return player.points.add(1).pow(0.05)
+			return player.points.add(1).pow(0.05)
 		 },
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
 		21: {
-		title: "Exponentially Greater",
-		description: "Starting Values are multiplied by Exponentials",
-		cost: new Decimal(1024),
-		 effect() {
-			 if (player.u.unlocked) return (player.points.add(1).pow(0.2)).add(tmp.u.effect)
-        return (player.e.points.pow(0.1)).add(2)
-		 },
-		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		  unlocked() {return player.e.unlocked}
-		},
-		22: {
-		title: "Upgraded Starting Values",
-		description: "Starting Values are multiplied by Upgraders",
-		cost: new Decimal(1024),
-		 effect() {
-			 if (player.u.unlocked) return (player.points.add(1).pow(0.2)).add(tmp.u.effect)
-        return (player.e.points.pow(0.3333333)).add(1)
-		 },
-		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		  unlocked() {return player.u.unlocked}
-		},
-		23: {
-		title: "Exponential Starting Values",
-		description: "Starting Values are raised to the power of 2",
-		cost: new Decimal(1e10),
-		  unlocked() {return hasUpgrade("u",12) }
+		title: "Moar... 2",
+		description: "x2 Starting Value",
+		cost: new Decimal(1e6),
+		  unlocked() {return hasAchievement("a",14) }
 		},
 		31: {
-		title: "Yes.",
-		description: "^2 Exponentials and Upgraders",
-		cost: new Decimal(5e25),
-		  unlocked() {return hasUpgrade("u",22) }
+		title: "god no (the upgrade)",
+		description: "Starting Values are raised to the power of 1.1",
+		cost: new Decimal(1e10),
+		  unlocked() {return hasAchievement("a",16) }
 		},
 		32: {
-		title: "VS",
-		description: "Values boost Starting Values",
-		cost: new Decimal(1e50),
-		effect() {
-			if (hasUpgrade("p", 41)) return (((player.points.add(1)).log10()).pow(2)).times(2)
-				else return ((player.points.add(1)).log10()).pow(2)
-		 },
-		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		  unlocked() {return hasUpgrade("u",51) }
+		title: "Thy Removed: E",
+		description: "Point gain is squared.",
+		cost: new Decimal(1e15),
+		  unlocked() {return hasUpgrade("p",31) }
 		},
 		33: {
-		title: "Starting Inflation",
-		description: "Starting Values boost Starting Values",
-		cost: new Decimal(1e60),
+		title: "Thy Removed: U",
+		description: "Starting Value Upgrades buff Points",
+		cost: new Decimal(1e15),
 		effect() {
-			if (hasUpgrade("p", 41)) return ((player.p.points.add(1)).log10()).times(2)
-				else return ((player.p.points.add(1)).log10())
+				return Decimal.pow(4,player.p.upgrades.length)
 		 },
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		  unlocked() {return hasUpgrade("u",51) }
-		},
-		41: {
-		title: "god no",
-		description: "x2 buff to VS and Starting Inflation.",
-		cost: new Decimal(1e75),
-		  unlocked() {return hasUpgrade("u",51) }
+		  unlocked() {return hasUpgrade("p",31) }
 		},
 	},
     layerShown(){return true},
-	passiveGeneration() { return (hasMilestone("e", 0)&&true!=false)?0.5:0 },
-	milestones: {
-		0: {
-			requirementDescription: "15 Exponentials and 15 Upgraders",
-				done() { return player.e.points.gte(15)&&player.u.points.gte(15)},
-				effectDescription: "Keep Prestige Point Upgrades on both of their resets.",
-				unlocked() {return player.e.unlocked&&player.u.unlocked},
-		},
-	},
+	passiveGeneration() { return (hasUpgrade("n", 23)&&true!=false)?1:0 },
 	doReset(resettingLayer) {
 			let keep = [];
-			if (hasMilestone("p", 0) && resettingLayer=="e"||hasMilestone("p", 0) && resettingLayer=="u") keep.push("upgrades")
-			if (hasMilestone("p", 0) && resettingLayer=="e"||hasMilestone("p", 0) && resettingLayer=="u") keep.push("milestones")
+			if (hasMilestone("m", 0) && resettingLayer=="m") keep.push("upgrades")
+			if (hasMilestone("n", 0) && resettingLayer=="n") keep.push("upgrades")
 			if (layers[resettingLayer].row > this.row) layerDataReset("p", keep)
 		},
 })
-addLayer("e", {
+addLayer("n", {
 		branches: ['p'],
-    name: "e", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "n", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "N", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
+		number: new Decimal(0),
     }},
-    color: "#4071BF",  //#3380FF
-    requires: new Decimal(1e3), // Can be a function that takes requirement increases into account
-    resource: "exponential", // Name of prestige currency
+    color: "#df2049",  //#ff0339
+    requires: new Decimal(200), // Can be a function that takes requirement increases into account
+    resource: "numerical energy", // Name of prestige currency
     baseResource: "Values", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 1.35,
+    exponent: 1.3,
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-		if (hasUpgrade("e", 22)) mult = mult.div(upgradeEffect("e",22))
-			if (hasUpgrade("e", 23)) mult = mult.div(2)
-				if (hasUpgrade("e", 24)) mult = mult.div(4)
-					if (hasUpgrade("e", 41)) mult = mult.div((upgradeEffect("p",13)).pow(0.2))
+		if (hasUpgrade('n',21)) mult = mult.times(1/3)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -170,230 +122,213 @@ addLayer("e", {
     },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "e", description: "E: Reset for Exponentials", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "n", description: "N: Reset for numerical energy.", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 	effect() {
-		let base = new Decimal(1);
-			base = base.times(player.e.points.pow(0.1))
-			base = base.add(player.points.pow(0.5))
-			base = base.times(player.e.points)
-			if (hasUpgrade("e", 11)) base = base.times(2)
-			if (hasUpgrade("e", 21)) base = base.add(player.points.add(1).pow(0.05))
-			if (hasUpgrade("e", 33)) base = base.pow(1.5)
-			if (player.se.unlocked) base = base.times(tmp.se.effect)
+		let base = new Decimal(player.n.points);
+		base = Decimal.pow(base,0.5)
+		if (hasUpgrade('n',11)) base = base.times(2)
+			if (hasUpgrade('n',13)) base = base.times(upgradeEffect('n', 13))
+		if (hasUpgrade('n',31)) base = base.times(upgradeEffect('n', 31))
 			return base
 		},
 		effectDescription() {
-			return "which are boosting all point generation by +"+format(tmp.e.effect)
+			return "which are increasing the number by +"+format(tmp.n.effect)+"/tick??? (unknown if true)"
 		},
-		autoPrestige() { return (hasMilestone("e", 1) && player.e.auto) },
-	milestones: {
-		0: {
-			requirementDescription: "5 Exponentials",
-				done() { return player.e.points.gte(5)},
-				effectDescription: "Gain 50% of Starting Value gain per second.",
+	numberMult() {
+		base = new Decimal(player.n.number);
+			return Decimal.pow(1.15,(base.add(1).log(2)))
 		},
-		1: {
-			requirementDescription: "10 Exponentials",
-				done() { return player.e.points.gte(10)},
-				effectDescription: "You can auto buy Exponentials.",
-				toggles: [["e", "auto"]],
-		},
+		update(diff) {
+		if (player.n.unlocked) player.n.number = player.n.number.add(tmp.n.effect)
 	},
 	upgrades: {
 		11: {
-		title: "Duplication",
-		description: "x2 boost to Value boost",
+		title: "Numerical Expansion",
+		description: "x2 number gained.",
 		cost: new Decimal(3),
 		},
 		12: {
-		title: "Inflation, again",
-		description: "Value Inflation also boosts Starting Values",
-		cost: new Decimal(3),
+		title: "ONE",
+		description: "Numerical Energy multiplies Starting Values.",
+		cost: new Decimal(5),
+		 effect() {
+        return ((player.n.points.add(1)).log(1.1)).add(1)
+		 },
+		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
-		21: {
-		title: "Inflation Steal",
-		description: "Value Inflation is added to the Value Boost",
+		13: {
+		title: "Exponentials Return??? (LIES!!)",
+		description: "The Number boost's it's own generation.",
 		cost: new Decimal(8),
 		 effect() {
-						 if (player.u.unlocked) return (player.points.add(1).pow(0.2)).add(tmp.u.effect)
-        else return player.points.add(1).pow(0.2)
+        return ((((player.n.number.add(1)).log(1.1)).add(1)).log(1.1)).add(1)
 		 },
-		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"+" },
-		unlocked() { return (hasUpgrade("e", 12)) },
+		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+		},
+		21: {
+		title: "Empower",
+		description: "x3 Numerical Energy gained.",
+		cost: new Decimal(3),
+		unlocked() {return hasMilestone("n",1) }
 		},
 		22: {
-		title: "The Ultimate Discount",
-		description: "Value Inflation's formula is used but Values are replaced by Exponentials.",
-		cost: new Decimal(10),
-		 effect() {return player.e.points.add(1).pow(0.2)
+		title: "Complex Numbers",
+		description: "The number buffs P12's effect",
+		cost: new Decimal(9),
+		 effect() {
+        return (player.n.number.add(1)).log(1.1)
 		 },
-		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		unlocked() { return (hasUpgrade("e", 21)&&hasUpgrade("p", 13)||hasUpgrade("e", 22))},
+		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+		unlocked() {return hasMilestone("n",1) }
 		},
 		23: {
-		title: "Duplication of Duplication",
-		description: "x2 exponentials obtained.",
-		cost: new Decimal(11),
-		unlocked() { return (hasUpgrade("u", 12)) },
-		},
-		24: {
-		title: "Replicanti",
-		description: "x4 exponentials obtained.",
-		cost: new Decimal(15),
-		unlocked() { return (hasUpgrade("u", 22)) },
+		title: "Passive Income",
+		description: "Automatically gain starting value",
+		cost: new Decimal(12),
+		unlocked() {return hasMilestone("n",1) }
 		},
 		31: {
-		title: "Ascend",
-		description: "Exponentials now buff Starting Value Gain",
-		cost: new Decimal(12),
-		 effect() {return player.e.points.add(1).pow(0.5)
-		 },
-		effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		unlocked() { return (hasUpgrade("e", 21)) },
-		},
-		32: {
-		title: "The Biscount",
-		description: "The Ultimate Discount now buffs Upgraders",
-		cost: new Decimal(12),
-		unlocked() { return (hasUpgrade("e", 21)) },
-		},
-		33: {
-		title: "IMPOSSIBLE",
-		description: "The Exponentials Buff is raised to the power of 1.5",
-		cost: new Decimal(25),
-		unlocked() { return (hasUpgrade("e", 32)&&hasUpgrade("e", 31)) },
-		},
-		41: {
-		title: "Discount of the Exponents",
-		description: "Value Inflation buffs Exponentials (brought to the 5th root)",
+		title: "QUATERNIONS???",
+		description: "Number gain is multiplied by points",
 		cost: new Decimal(50),
-		effectDisplay() { return format((upgradeEffect("p",13)).pow(0.2))+"x" },
-		unlocked() { return (hasUpgrade("e", 33)) },
+		effect() {
+        return (player.points).log(1.01)
+		 },
+		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+		unlocked() {return hasUpgrade("n",21) && hasUpgrade("n",22) && hasUpgrade("n",23) }
 		},
 	},
+	milestones: {
+		0: {
+			requirementDescription: "5 Numerical Energy",
+				done() { return player.n.points.gte(5)},
+				effectDescription: "Keep Starting Value upgrades on reset.",
+		},
+		1: {
+			requirementDescription: "8 Numerical Energy",
+				done() { return player.n.points.gte(8)},
+				effectDescription: "Unlock new upgrades for Numerical Energy and Multipliers."
+		},
+	},
+	tabFormat: ["main-display",
+			"prestige-button",
+			["display-text",
+				function() {return 'The number is equal to ' + format(player.n.number) + ', which boosts Point generation by '+format(tmp.n.numberMult)+'x'},
+					{}],
+			"blank",
+		 "milestones", "blank", "blank", "upgrades"],
     layerShown(){return true}
 })
-addLayer("u", {
+addLayer("m", {
 		branches: ['p'],
-    name: "u", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "U", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "m", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "M", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
+		divider: new Decimal(0),
     }},
-    color: "#CF44BB",
-    requires: new Decimal(1e3), // Can be a function that takes requirement increases into account
-    resource: "Upgraders", // Name of prestige currency
+    color: "#57b319",
+    requires: new Decimal(200), // Can be a function that takes requirement increases into account
+    resource: "multipliers", // Name of prestige currency
     baseResource: "Values", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 1.35,
+    exponent: 1.3,
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
-		if (hasUpgrade("e", 32)) mult = mult.div(upgradeEffect("e",22))
+		if (hasUpgrade("n", 32)) mult = mult.div(upgradeEffect("n",22))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
         mult = new Decimal(1)
-			if (hasUpgrade("p", 31)) mult = mult.add(1)
 				return mult
     },
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "u", description: "U: Reset for Upgraders", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "m", description: "M: Reset for Multipliers", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 	effectBase() {
-			let base = new Decimal(10);
-			base = base.add(player.points.pow(0.05))
+			let base = new Decimal(1.5);
+			if (hasUpgrade('m',11)) base = base.add(0.1)
+				if (hasUpgrade('m',12)) base = base.add(upgradeEffect('m', 12))
+				if (hasUpgrade('m',13)) base = base.add(upgradeEffect('m', 13))
+				if (hasUpgrade('m',21)) base = base.add(0.5)
+				if (hasUpgrade('m',22)) base = base.times(1.1)
 			return base
 		},
 	effect() {
-		let m = Decimal.pow(tmp.u.effectBase, 2)
-		m = m.times(player.u.points)
-		if (hasUpgrade("u", 11)) m = m.times(2)
-			if (hasUpgrade("u", 13)) m = m.pow(1.1)
-				if (hasUpgrade("u", 62)) m = m.add((upgradeEffect('p', 13).log2()))
-					
-			return m
+		let m = Decimal.pow(tmp.m.effectBase, player.m.points)
+			
+			if (hasUpgrade("m",22)) return m
+		else 
+			if (hasMilestone("m",1)) return m.div((player.points).div((player.m.points.add(1)).times(10000)).add(1)).add(1)
+		else return m.div((player.points).div((player.m.points.add(1)).times(1000)).add(1)).add(1)
 		},
 		effectDescription() {
-			return "which are boosting all Starting Value Upgrades that are not unlocked by upgrades from this layer by +"+format(tmp.u.effect)
+			return "which is boosting Value generation by "+format(tmp.m.effect)+"x"
 		},
 	upgrades: {
 		11: {
-		title: "Upgrading the Upgrader of Upgrades",
-		description: "x2 to the Upgrade Boost",
+		title: "Addition to Multiplication",
+		description: "+0.1 to the Multiplier's base.",
 		cost: new Decimal(3),
 		},
 		12: {
-		title: "NO!! TOO MANY!! TOO MANY UPGRADES!!!!",
-		description: "Unlock new upgrades for Starting Values and Exponentials.",
-		cost: new Decimal(3),
+		title: "MOAR!!",
+		description: "Starting Values add to Multiplier's base.",
+		cost: new Decimal(5),
+		 effect() {
+        return ((((player.p.points.add(1)).log10()).add(1)).log10()).add(1)
+		 },
+		  effectDisplay() { return "+"+format(upgradeEffect(this.layer, this.id)) },
 		},
 		13: {
-		title: "This one might be exponential",
-		description: "^1.1 to the Upgrade Boost",
+		title: "GOD STOP STEALING MY NUMBERLINE",
+		description: "The Number adds to Multiplier's base.",
 		cost: new Decimal(8),
-		unlocked() {return (player.e.unlocked && hasUpgrade("u", 11)||hasUpgrade("u", 13)) },
+		 effect() {
+        return (((player.n.number.add(1)).log(5000)).pow(3)).div(10)
+		 },
+		  effectDisplay() { return "+"+format(upgradeEffect(this.layer, this.id))},
 		},
+
 		21: {
-		title: "Descend",
-		description: "^1.1 to point gain",
-		cost: new Decimal(10),
-		unlocked() {return (hasUpgrade("u", 13))},
+		title: "More Addition!!!!",
+		description: "+0.5 to the multiplier's base",
+		cost: new Decimal(5),
+		unlocked() {return hasMilestone("n",1) }
 		},
 		22: {
-		title: "Even more upgrades???",
-		description: "Unlock new upgrades for Starting Values and Exponentials.",
-		cost: new Decimal(11),
-		unlocked() {return (hasUpgrade("u", 13)&&hasUpgrade("u", 12))},
+		title: "Explosion",
+		description: "Multiplier's boost is not divided by points.",
+		cost: new Decimal(9),
+		unlocked() {return hasMilestone("n",1) }
 		},
-		31: {
-		title: "Descending Further",
-		description: "^1.1 Prestige Points",
-		cost: new Decimal(12),
-		unlocked() {return (hasUpgrade("u", 13))},
-		},
-			41: {
-		title: "Bescend",
-		description: "^1.1 to Value Inflation",
-		cost: new Decimal(20),
-		unlocked() {return (hasUpgrade("u", 31))},
-		},
-		51: {
-		title: "Ascension (with upgrades)",
-		description: "Unlock three new Starting Value upgrades.",
-		cost: new Decimal(25),
-		unlocked() {return (hasUpgrade("u", 41))},
-		},
-		61: {
-		title: "New Beginnings",
-		description: "Starting Values are buffed by the Upgrader Boost.",
-		cost: new Decimal(40),
-		unlocked() {return (hasUpgrade("u", 41))},
-		},
-		62: {
-		title: "Absolute Inflation",
-		description: "The Upgrader Boost is boosted by Value Inflation",
-		cost: new Decimal(40),
-		effectDisplay() { return "+"+format(upgradeEffect('p', 13).pow(0.75)) },
-		unlocked() {return (hasUpgrade("u", 41))},
+		23: {
+		title: "Repetition",
+		description: "Each multiplier gives a x2 point gain (n multipliers gives a buff of 2^n)",
+		cost: new Decimal(15),
+		 effect() {
+        return new Decimal(2).pow(player.m.points)
+		 },
+		  effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))},
+		  unlocked() {return hasMilestone("n",1) }
 		},
 	},
-	autoPrestige() { return (hasMilestone("u", 1) && player.u.auto) },
+	autoPrestige() { return (hasMilestone("m", 1) && player.m.auto) },
 	milestones: {
 		0: {
-			requirementDescription: "5 Upgraders",
-				done() { return player.u.points.gte(5)},
-				effectDescription: "x1.2 buff to Point generation.",
+			requirementDescription: "5 Multipliers",
+				done() { return player.m.points.gte(5)},
+				effectDescription: "Keep Starting Value upgrades on reset.",
 		},
 		1: {
-			requirementDescription: "10 Upgraders",
-				done() { return player.u.points.gte(10)},
-							effectDescription: "You can autobuy Upgraders.",
-							toggles: [["u", "auto"]]
+			requirementDescription: "8 Multipliers",
+				done() { return player.m.points.gte(8)},
+							effectDescription: "The Point Division is weakened.",
 		},
 	},
     layerShown(){return true},
@@ -403,7 +338,7 @@ addLayer("u", {
 		 "milestones", "blank", "blank", "upgrades"],
 })
 addLayer("po", {
-		branches: ['e'],
+		branches: ['n'],
 		nodeStyle() { return {
 			color: (player.po.unlocked?"rgba(0, 0, 0, 1)":"rgba(0, 0, 0, 0.5)"),
 		}},
@@ -443,16 +378,16 @@ addLayer("po", {
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
 	},
-    layerShown(){if (player.e.unlocked) return true
+    layerShown(){if (player.n.unlocked) return true
 	else return false}
 })
-addLayer("n", {
+addLayer("ne", {
 nodeStyle() { return {
-			color: (player.n.unlocked?"rgba(255, 255, 255, 1)":"rgba(0, 0, 0, 0.5)"),
+			color: (player.ne.unlocked?"rgba(255, 255, 255, 1)":"rgba(0, 0, 0, 0.5)"),
 		}},
-		branches: ['e'],
-    name: "n", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "N", // This appears on the layer's node. Default is the id with the first letter capitalized
+		branches: ['n'],
+    name: "ne", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "NE", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 3, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
@@ -487,14 +422,16 @@ nodeStyle() { return {
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
 	},
-    layerShown(){if (player.e.unlocked) return true
+    layerShown(){if (player.n.unlocked) return true
 	else return false}
 })
 addLayer("i", {
-	//nodeStyle() { return {
-			//background: (player.i.unlocked?"radial-gradient(#ff6400, #ff6400, #000000, #000000)":"rgba(0, 0, 0, 0.5)"),
-		//}},
-		branches: ['e','u'],
+	nodeStyle() { return {
+			background: (player.i.unlocked?"radial-gradient(#ff6400, #ff6400, #000000, #000000)":"rgba(191, 143, 143, 1)"),
+			//animation: (),
+}
+		},
+		branches: ['n','m'],
     name: "i", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "∞", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 4, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -556,16 +493,16 @@ else return player[this.layer].points.gte(this.cost())		},
 		description: "Adds Points to the Exponential Buff",
 		cost: new Decimal(5),
 		 effect() {
-        return player.points.add(1).pow(new Decimal(0.75).times(player.e.points))
+        return player.points.add(1).pow(new Decimal(0.75).times(player.n.points))
 		 },
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"+" },
 		},
 	},
 
-layerShown(){return player.e.unlocked&&player.u.unlocked},
+layerShown(){return player.n.unlocked&&player.m.unlocked},
 })
 addLayer("d", {
-		branches: ['u'],
+		branches: ['m'],
     name: "d", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "D", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 5, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -595,9 +532,9 @@ addLayer("d", {
 	},
 	dimensionPow() {
 		effect = player.d.power
-		effect = effect.mul(player.u.points.add(1))
+		effect = effect.mul(player.m.points.add(1))
 		effect = effect.pow(1.1)
-		return effect
+		return effect.add(1)
 	},
 	effectDescription() {
 		return "that generate "+format(tmp.d.effect)+" Dimensional Power every second."
@@ -618,15 +555,15 @@ addLayer("d", {
 		description: "x2 Dimensional power and x2 Dimensions",
 		cost: new Decimal(10),
 		},
-		12: {
-		title: "Dimensional Upgrade",
-		description: "Dimensional Power's buff is buffed by the Upgrader Buff",
-		cost: new Decimal(20),
-		 effect() {
-        return ((tmp.u.effect).pow(0.25))
-		 },
-		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
-		},
+		//12: {
+		//title: "Dimensional Upgrade",
+		//description: "Dimensional Power's buff is buffed by the Upgrader Buff",
+		//cost: new Decimal(20),
+		 //effect() {
+       // return ((tmp.m.effect).pow(0.25))
+		// },
+		//  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+		//},
 		13: {
 		title: "Dimensions Starting Point",
 		description: "Dimensional Power Generation is buffed by Starting Value Amount",
@@ -658,7 +595,7 @@ title: "Meta Dimension",
         },
 		},
 	},
-    layerShown(){return player.u.unlocked},
+    layerShown(){return player.m.unlocked},
 	tabFormat: ["main-display",
 			"prestige-button",
 			"blank",
@@ -668,10 +605,10 @@ title: "Meta Dimension",
 			"blank",
 		 "milestones", "upgrades", "buyables", "blank"],
 })
-addLayer("se", {
-		branches: ['e'],
-    name: "se", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "SE", // This appears on the layer's node. Default is the id with the first letter capitalized
+addLayer("sn", {
+		branches: ['n'],
+    name: "sn", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "SN", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: false,
@@ -681,7 +618,7 @@ addLayer("se", {
     requires: new Decimal("100"), // Can be a function that takes requirement increases into account
     resource: "Super Exponentials", // Name of prestige currency
     baseResource: "Exponentials", // Name of resource prestige is based on
-    baseAmount() {return player.e.points}, // Get the current amount of baseResource
+    baseAmount() {return player.n.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.65, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
@@ -693,15 +630,15 @@ addLayer("se", {
     },
     row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "E", description: "Press Shift+E to preform a Super Exponential Reset", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "N", description: "Press Shift+N to preform a Super Exponential Reset", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 	effect() {
-		effect = new Decimal(player.e.points)
-		effect = effect.pow(player.se.points)
+		effect = new Decimal(player.n.points)
+		effect = effect.pow(player.sn.points)
 		return effect
 	},
 	effectDescription() {
-			return "which are multiplying the Exponentials boost by "+format(tmp.se.effect)+"x"
+			return "which are multiplying the Exponentials boost by "+format(tmp.sn.effect)+"x"
 		},
 	upgrades: {
 		11: {
@@ -717,7 +654,7 @@ addLayer("se", {
     layerShown(){return player.po.unlocked&&player.n.unlocked}
 })
 addLayer("su", {
-		branches: ['u'],
+		branches: ['m'],
     name: "su", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "SU", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 7, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -729,7 +666,7 @@ addLayer("su", {
     requires: new Decimal("100"), // Can be a function that takes requirement increases into account
     resource: "super", // Name of prestige currency
     baseResource: "Upgraders", // Name of resource prestige is based on
-    baseAmount() {return player.u.points}, // Get the current amount of baseResource
+    baseAmount() {return player.m.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.65, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
@@ -757,7 +694,7 @@ addLayer("su", {
     layerShown(){return player.d.unlocked}
 })
 addLayer("l", {
-		branches: ['se'],
+		branches: ['sn'],
     name: "l", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "L", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -769,7 +706,7 @@ addLayer("l", {
     requires: new Decimal("25"),
     resource: "Lunar Shards",
     baseResource: "Super Exponentials",
-    baseAmount() {return player.se.points}, // Get the current amount of baseResource
+    baseAmount() {return player.sn.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.25, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
@@ -794,7 +731,7 @@ addLayer("l", {
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
 	},
-    layerShown(){return player.se.unlocked}
+    layerShown(){return player.sn.unlocked}
 })
 addLayer("z", {
 		branches: ['n','po'],
@@ -805,6 +742,9 @@ addLayer("z", {
         unlocked: false,
 		points: new Decimal(0),
     }},
+	nodeStyle() { return {
+			color: (player.z.unlocked?"rgba(0, 0, 0, 1)":"rgba(0, 0, 0, 0.5)"),
+		}},
     color: "#8F8F8F",
     requires: new Decimal("1e400"),
     resource: "Zeros", // Name of prestige currency
@@ -834,7 +774,7 @@ addLayer("z", {
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		},
 	},
-    layerShown(){return player.n.unlocked&&player.po.unlocked&&player.se.unlocked}
+    layerShown(){return player.n.unlocked&&player.po.unlocked&&player.sn.unlocked}
 })
 addLayer("et", {
 		branches: ['i'],
@@ -1198,7 +1138,7 @@ addLayer("an", {
 })
 addLayer("in", {
 		branches: [['z',3],'on'],
-    name: "f", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "in", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "IN", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1339,80 +1279,92 @@ addLayer("a", {
 				image: "images/achs/11.png",
             },
 			12: {
-                name: "This isn't exponential though..",
-                done() { return player.e.unlocked },
-                tooltip: "Unlock Exponentials",
+                name: "incremental incremental???",
+                done() { return player.n.unlocked },
+                tooltip: "Unlock Numerical Energy",
 				image: "images/achs/12.png",
             },
 			13: {
-                name: "How do you upgrade the UPGRADES???",
-                done() { return player.u.unlocked },
-                tooltip: "Unlock Upgraders",
+                name: "No replicanti?",
+                done() { return player.m.unlocked },
+                tooltip: "Unlock Multipliers",
 				image: "images/achs/13.png",
             },
 			14: {
+                name: "The most generic row in a generic tree",
+                done() { return player.m.unlocked&&player.n.unlocked },
+                tooltip: "Unlock all row 2 stats. Reward: get 3 new prestige upgrades for balancing lol",
+				image: "images/achs/real14.png",
+            },
+			15: {
                 name: "Did you even think starting values were free?",
                 done() { return player.p.points.gte(100) },
                 tooltip: "Get 100 Starting Values.",
 				image: "images/achs/14.png",
             },
-			15: {
+			16: {
+                name: "oh god no",
+                done() { return player.p.points.gte("1e10") },
+                tooltip: "Get 1e10 Starting Values. Reward: new upgrades for starting values",
+				image: "images/achs/real16.png",
+            },
+			17: {
                 name: "That's pretty upbeat",
-                done() { return player.po.unlocked },
+                done() { return player.po.points.unlocked },
                 tooltip: "Unlock Positives. Reward: x2 to the Exponential Buff",
 				image: "images/achs/15.png",
             },
-			16: {
+			21: {
                 name: ":sob:",
-                done() { return player.n.unlocked },
+                done() { return player.ne.points.unlocked },
                 tooltip: "Unlock Negatives. Reward: x2 to point gain.",
 				image: "images/achs/16.png",
             },
-			17: {
+			22: {
                 name: "Dimensions Starting Point",
-                done() { return player.d.unlocked },
+                done() { return player.d.points.unlocked},
                 tooltip: "Unlock Dimensions. Reward: x2 to Upgrader Buff",
 				image: "images/achs/17.png",
             },
-			21: {
+			23: {
                 name: "Let me guess, costs like, 2 values?",
-                done() { return player.i.unlocked },
+                done() { return player.i.points.unlocked },
                 tooltip: "Unlock Infinities. Reward: x2 gain to Dimensions, Positives, and Negatives.",
 				image: "images/achs/21.png",
             },
-			22: {
+			24: {
                 name: "it was always exponential",
-                done() { return player.se.unlocked },
+                done() { return player.sn.points.unlocked },
                 tooltip: "Unlock Super Exponentials. Reward: ^1.1 Points",
 				textStyle: {'color': '#ff0000'},
 				image: "images/achs/real22.png",
             },
-			23: {
+			25: {
                 name: "Upgraders for Upgraders (which are upgrades for upgrades)",
-                done() { return player.su.unlocked },
+                done() { return player.su.points.unlocked },
                 tooltip: "Unlock Super Upgraders. Reward: 3 more Upgrader Upgrades",
 				image: "images/achs/real23.png",
             },
-			24: {
+			26: {
                 name: "Oh wow you really did that woah that's really cool wow",
                 done() { return player.l.unlocked||player.z.unlocked||player.et.unlocked||player.s.unlocked },
                 tooltip: "Do a 4th row reset. Reward: x4 Points gained.",
 				image: "images/achs/22.png",
             },
-			25: {
+			27: {
                 name: "Eternally only worth 2 values",
-                done() { return player.et.unlocked },
+                done() { return player.et.points.unlocked },
                 tooltip: "Unlock Eternities. Reward: x1.5 Infinities and Big Crunch hardcap is now 2.",
 				image: "images/achs/23.png",
             },
-			26: {
+			31: {
                 name: "Oh wow you went beyond just really cool",
                 done() { return player.l.unlocked&&player.z.unlocked&&player.et.unlocked&&player.s.unlocked },
                 tooltip: "Get all 4th row stats. Reward: x4 2nd row stats gained.",
 				image: "images/achs/24.png",
 				
             },
-			27: {
+			32: {
                 name: "Positives and Negatives Round 2",
                 done() { return player.l.unlocked&&player.s.unlocked },
                 tooltip: "Get Lunars and Solars. Reward: x2 to the Super Upgraders and Super Exponential Buffs.",

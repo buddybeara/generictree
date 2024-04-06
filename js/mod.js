@@ -7,20 +7,20 @@ let modInfo = {
 
 	discordName: "there is no server for this",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 48,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.2",
-	name: "Gaining Alpha???"
+	num: "0.3",
+	name: "The Morbidly Obese Update"
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.2</h3><br>
-		- Added some upgrades, Dimensions now have a lot added, some new requirements, Achievements added, Infinities now have 1 buyable. <br>
-		- a bit less wip lol`
+	<h3>v0.3</h3><br>
+		- replaced the entirety of row/layer 2 <br>
+		- row/layer 3 is unlockable but still wip... going to release soon!`
 
 let winText = `Wow you actually did that`
 
@@ -43,14 +43,18 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if (hasUpgrade('p', 11)) gain = gain.times(1.5+tmp.u.effect)
+	if (hasUpgrade('p', 11)) gain = gain.times(1.5)
 		if (hasUpgrade('p', 12)) gain = gain.times(upgradeEffect('p', 12))
 					if (hasUpgrade('p', 13)) gain = gain.times(upgradeEffect('p', 13))
-				if (player.e.unlocked) gain = gain.add(tmp.e.effect)
-					if (player.i.unlocked) gain = gain.pow(buyableEffect('i',11))
+					if (hasUpgrade('p', 23)) gain = gain.times(upgradeEffect('p', 23))
+						if (hasUpgrade('m', 23)) gain = gain.times(upgradeEffect('m', 23))
+				if (player.n.unlocked) gain = gain.times(tmp.n.numberMult)
+					if (player.m.unlocked) gain = gain.times(tmp.m.effect)
 						if (player.d.unlocked) gain = gain.times(tmp.d.dimensionPow)
-							if (hasMilestone('u', 0)) gain = gain.times(1.2)
-							if (hasUpgrade('u', 21)) gain = gain.pow(1.1)
+							//if (hasMilestone('u', 0)) gain = gain.times(1.2)
+							//if (hasUpgrade('u', 21)) gain = gain.pow(1.1)
+							if (player.i.unlocked) gain = gain.pow(buyableEffect('i',11))
+						if (hasUpgrade('p', 22)) gain = gain.pow(2)
 	return gain
 }
 
@@ -64,7 +68,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("ee2.718e30"))
+	return player.points.gte(new Decimal("eee33"))
 }
 
 
