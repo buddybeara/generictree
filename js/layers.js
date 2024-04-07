@@ -193,7 +193,7 @@ addLayer("n", {
 		description: "Number gain is multiplied by points",
 		cost: new Decimal(50),
 		effect() {
-        return (player.points).log(1.01)
+        return ((player.points).add(1)).log(1.01)
 		 },
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		unlocked() {return hasUpgrade("n",21) && hasUpgrade("n",22) && hasUpgrade("n",23) }
