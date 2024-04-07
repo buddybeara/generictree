@@ -281,7 +281,7 @@ addLayer("m", {
 		description: "Starting Values add to Multiplier's base.",
 		cost: new Decimal(5),
 		 effect() {
-        return ((((player.p.points.add(1)).log10()).add(1)).log10()).add(1)
+        return ((((player.p.points.add(1)).log10()).add(1)).log10())
 		 },
 		  effectDisplay() { return "+"+format(upgradeEffect(this.layer, this.id)) },
 		},
@@ -533,6 +533,7 @@ addLayer("d", {
 	dimensionPow() {
 		effect = player.d.power
 		effect = effect.mul((player.m.points.add(1.5)).log(5))
+		effect = effect.pow(1.01)
 		return effect.add(1)
 	},
 	effectDescription() {
