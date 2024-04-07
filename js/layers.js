@@ -193,7 +193,7 @@ addLayer("n", {
 		description: "Number gain is multiplied by points",
 		cost: new Decimal(50),
 		effect() {
-        return ((player.points).add(1)).log(1.01)
+        return ((player.points).add(200)).log(1.01)
 		 },
 		  effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
 		unlocked() {return hasUpgrade("n",21) && hasUpgrade("n",22) && hasUpgrade("n",23) }
@@ -517,7 +517,7 @@ addLayer("d", {
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.25, // Prestige currency exponent
+    exponent: 0.01, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 		if (hasUpgrade("d", 11)) mult = mult.times(2)
@@ -525,15 +525,14 @@ addLayer("d", {
     },
 	effect() {
 		effect = new Decimal(2)
-		effect = effect.pow(player.d.points.pow(0.01))
+		effect = effect.pow(player.d.points.pow(0.1))
 		if (hasUpgrade("d", 13)) effect = effect.times(upgradeEffect('d', 13))
 			if (hasUpgrade("d", 11)) effect = effect.times(2)
 		return effect.sub(1)
 	},
 	dimensionPow() {
 		effect = player.d.power
-		effect = effect.mul(player.m.points.add(1))
-		effect = effect.pow(1.1)
+		effect = effect.mul((player.m.points.add(1.5)).log(5))
 		return effect.add(1)
 	},
 	effectDescription() {
