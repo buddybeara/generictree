@@ -268,18 +268,25 @@ addLayer("m", {
 		let m = Decimal.pow(tmp.m.effectBase, player.m.points)
 		if (player.m.points.eq(new Decimal("0"))) return 1
 		if (inChallenge("ne",11)) {
-			return m.div((player.points.add(1)).log(10).add(1)) // log10
+			return m.div((player.points.add(1)).log(10).add(1)).add(1) // log10
 		} else {
 			if (hasUpgrade('m',22)) return m
-		else if (hasMilestone('m',1)) return m.div((player.points.add(1)).log(10000).add(1)) //log10k
-		else return m.div((player.points.add(1)).log(1000).add(1)) //log1k
+		else if (hasMilestone('m',1)) return m.div((player.points.add(1)).log(10000).add(1)).add(1) //log10k
+		else return m.div((player.points.add(1)).log(1000).add(1)).add(1) //log1k
 		}
 	},
 		effectDescription() {
 			return "which is boosting Value generation by "+format(tmp.m.effect)+"x"
 		},
 	findDivider() {
-		player.m.divider = Decimal.pow(tmp.m.effectBase, player.m.points).div(tmp.m.effect)
+		if (player.m.points.eq(new Decimal("0"))) return player.m.divider = 1
+		if (inChallenge("ne",11)) {
+			player.m.divider = (player.points.add(1)).log(10).add(1) // log10
+		} else {
+			if (hasUpgrade('m',22)) player.m.divider = 1
+		else if (hasMilestone('m',1)) player.m.divider = (player.points.add(1)).log(10000).add(1) //log10k
+		else player.m.divider = (player.points.add(1)).log(1000).add(1) //log1k
+		}
 	},
 	upgrades: {
 		11: {
@@ -345,7 +352,7 @@ addLayer("m", {
     layerShown(){return true},
 	tabFormat: ["main-display",
 				["display-text",
-				function() {return 'Values are dividing the Multiplier buff by ' + format(player.m.divider) + '.'},
+				function() {return 'Values are dividing the Multiplier buff by ' + format(player.m.divider) + ' (before adding 1).'},
 					{}],
 				"blank",
 			"prestige-button",
@@ -1259,7 +1266,7 @@ addLayer("st", {
     requires: new Decimal("1e12"), // Can be a function that takes requirement increases into account
     resource: "Stars", // Name of prestige currency
     baseResource: "Lunar Shards, Solar Shards, and Eternities.", // Name of resource prestige is based on
-    baseAmount() {return new Decimal(0)}, // Get the current amount of baseResource
+    baseAmount() {return new Decimal(1e100)}, // Get the current amount of baseResource
     type: "custom", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
 	req: {l: new Decimal(1e100), s: new Decimal(1e100), et: new Decimal(100)},
 	requires() {return this.req},
