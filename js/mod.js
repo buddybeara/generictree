@@ -54,7 +54,7 @@ function getPointGen() {
 							//if (hasMilestone('u', 0)) gain = gain.times(1.2)
 							//if (hasUpgrade('u', 21)) gain = gain.pow(1.1)
 							if (player.i.unlocked) gain = gain.pow(buyableEffect('i',11))
-						if (hasUpgrade('p', 22)) gain = gain.pow(2)
+						if (hasUpgrade('p', 32)) gain = gain.pow(1.05)
 	return gain
 }
 

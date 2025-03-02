@@ -24,7 +24,7 @@
 	width: 100px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
-	border-radius: 33%;
+	border-radius: 5%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
 	font-family: "Lucida Console", "Courier New", monospace;
@@ -53,9 +53,29 @@
 	border-color: rgba(0, 0, 0, 0.125);
 	box-shadow: var(--hqProperty2a), 0 0 20px #ff0000;
 }
-
-
-
+.st:not(.locked):not(.bought) {
+	animation: spaaace 25s linear infinite;
+}
+@keyframes spaaace {
+	0% {
+		background-color: radial-gradient(#0d1866, #ffffff);
+	}
+	20% {
+		background-color: radial-gradient(#3d00a6, #ffffff);
+	}
+	40% {
+		background-color: radial-gradient(#b5220b, #ffffff);
+	}
+	60% {
+		background-color: radial-gradient(#e87f2a, #ffffff);
+	}
+	80% {
+		background-color: radial-gradient(#b50b6b, #ffffff);
+	}
+	100% {
+		background-color: radial-gradient(#0d1866, #ffffff);
+	}
+}
 .mark {
 	position: relative;
 	display: inline-block;
